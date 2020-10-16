@@ -1,0 +1,25 @@
+{
+    "name": "ferb/util",
+    "type": "library",
+    "description": "A few common classes that I'm sick of reimplementing every week",
+    "homepage": "https://github.com/jeff-becker-projekt202/FerbUtil",
+    "license": "MIT",
+    "require": {
+
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5.8",
+        "friendsofphp/php-cs-fixer": "^3.0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ferb\\Util\\": "src/",
+            "Ferb\\Util\\Tests\\":  "tests/"
+        }
+    },
+    "bin": ["bin/ferb-util"],
+    "scripts": {
+        "test":"php ./vendor/phpunit/phpunit/phpunit",
+        "fix-all":"php ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix .\\"
+    }
+}
