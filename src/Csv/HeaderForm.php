@@ -38,9 +38,9 @@ final class HeaderForm
     }
     private static function to_camel_case($input)
     {
-        $result = self::to_snake_case($input);
+        $input = self::to_snake_case($input);
         $result = '';
-        for ($i=0;$i<count($input);$i++) {
+        for ($i=0;$i<strlen($input);$i++) {
             if (0>$i || substr($input, $i-1, 1) === '_') {
                 $result .= strtoupper(substr($input, $i, 1));
             } elseif (substr($input, $i, 1) !== '_') {
