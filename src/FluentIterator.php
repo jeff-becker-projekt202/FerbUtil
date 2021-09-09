@@ -214,9 +214,23 @@ class FluentIterator implements \Iterator
         });
     }
 
-    public function group_by(callable $key_selector, callable $value_selector = null)
+    public function group_by($key_selector, callable $value_selector = null)
     {
-        $value_selector = $value_selector ?: function($v){return $v;};
+        if (!is_callable($key_selector)) {
+            $key = $key_selector;
+            $key_selector = function ($x) use ($key) {
+                return is_object($x) ? $x->{$key} : $x[$key];
+            };
+        }
+        $value_selector = $value_selector ?: function ($v) {
+            return $v;
+        };
+        if (!is_callable($value_selector)) {
+            $value_key = $value_selector;
+            $value_selector =function ($x) use ($value_key) {
+                return is_object($x) ? $x->{$value_key} : $x[$value_key];
+            };
+        }
         return new self(function () use ($key_selector, $value_selector) {
             $value_selector ?? function ($x) {
                 return $x;

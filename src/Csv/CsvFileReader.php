@@ -22,7 +22,10 @@ class CsvFileReader extends FluentIterator
             return (object)$x;
         });
     }
-    public function headers(){ return $this->iterator->firstRow; }
+    public function headers()
+    {
+        return $this->iterator->firstRow;
+    }
     private static function create($fileName, RowMap $transformer)
     {
         return new class($fileName, $transformer) implements \Iterator {

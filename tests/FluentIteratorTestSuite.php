@@ -117,20 +117,35 @@ class FluentIteratorTestSuite extends \PHPUnit\Framework\TestCase
     {
         $result = FluentIterator::from([1, 2, 3, 4, 15])->group_by(function ($x) {
             return $x % 2;
-        }, function ($x) {
-            return $x * 2;
         })->to_dictionary(function ($x) {
             return $x->key;
         }, function ($x) {
-            return $x->values;
+            return $x->values->to_array();
         });
+        $this->assertTrue(is_array($result), 'is array');
+        $this->assertTrue(array_key_exists(0, $result), 'has key 0');
+        $this->assertTrue(array_key_exists(1, $result), 'has key 1');
 
-        $this->assertEquals([
-            0 => [2, 4],
-            1 => [1, 3, 15],
-        ], $result);
+        $this->assertEquals(2, $result[0][0]);
+        $this->assertEquals(4, $result[0][1]);
+        $this->assertEquals(1, $result[1][0]);
+        $this->assertEquals(3, $result[1][1]);
+        $this->assertEquals(15, $result[1][2]);
     }
+    public function testGroupByString()
+    {
+        $result = FluentIterator::from([
+            ['a'=>1, 'b'=>'1'],
+            ['a'=>1],
+            ['a'=>2],
+            ['a'=>2],
+            ['a'=>3],
+        ])->group_by('a')->to_array();
 
+        //$this->assertEquals([], $result);
+        $this->assertEquals(1, $result[0]->key);
+        $this->assertEquals(['a'=>1, 'b'=>'1'], $result[0]->values->element_at(0));
+    }
     public function testZip()
     {
         $result = FluentIterator::from([1, 2, 3, 4, 5])->zip([2, 4, 6, 8])
