@@ -234,7 +234,7 @@ class FluentIterator implements \Iterator
             foreach ($groupings as $k => $v) {
                 yield (object) [
                     'key' => $k,
-                    'values' => $v,
+                    'values' => new FluentIterator($v),
                 ];
             }
         });
