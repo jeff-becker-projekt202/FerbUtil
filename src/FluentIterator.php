@@ -214,8 +214,9 @@ class FluentIterator implements \Iterator
         });
     }
 
-    public function group_by(callable $key_selector, callable $value_selector)
+    public function group_by(callable $key_selector, callable $value_selector = null)
     {
+        $value_selector = $value_selector ?: function($v){return $v;};
         return new self(function () use ($key_selector, $value_selector) {
             $value_selector ?? function ($x) {
                 return $x;
@@ -227,7 +228,7 @@ class FluentIterator implements \Iterator
                 if (!isset($groupings[$key])) {
                     $groupings[$key] = [];
                 }
-                $groupings[$key][] = $item;
+                $groupings[$key][] = $value;
             }
 
             foreach ($groupings as $k => $v) {

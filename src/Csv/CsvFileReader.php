@@ -117,7 +117,6 @@ class CsvFileReader extends FluentIterator
                     $this->rows = [];
                     $this->rowIndex = -1;
                     $this->fileHandle = null;
-                    $this->firstRow = null;
                 }
             }
         };
