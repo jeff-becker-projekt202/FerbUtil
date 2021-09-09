@@ -12,16 +12,16 @@ final class HeaderForm
             return self::to_snake_case($x);
         };
     }
-    public static function camel_casae()
+    public static function camelCase()
     {
         return function ($x) {
-            return self::to_camel_case($x);
+            return self::to_camelCase($x);
         };
     }
-    public static function pascal_case()
+    public static function PascalCase()
     {
         return function ($x) {
-            return self::to_pascal_case($x);
+            return self::to_PascalCase($x);
         };
     }
     private static function to_snake_case($input)
@@ -36,7 +36,7 @@ final class HeaderForm
         $res = strtolower($input);
         return $res;
     }
-    private static function to_camel_case($input)
+    private static function to_camelCase($input)
     {
         $input = self::to_snake_case($input);
         $result = '';
@@ -49,12 +49,12 @@ final class HeaderForm
         }
         return $result;
     }
-    private static function to_pascal_case($input)
+    private static function to_PascalCase($input)
     {
         if (strlen($input)<=1) {
             return strtoupper($input);
         }
-        $camelCase = self::to_camel_case($input);
+        $camelCase = self::to_camelCase($input);
         $result = strtoupper(substr($camelCase, 0, 1)) . substr($camelCase, 1, strlen($camelCase)-1);
         return $result;
     }

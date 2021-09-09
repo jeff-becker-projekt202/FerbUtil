@@ -9,9 +9,11 @@ use InvalidArgumentException;
 
 class CsvFileReader extends FluentIterator
 {
+    private $iterator;
     public function __construct($fileName, $transformer = null)
     {
-        parent::__construct(self::create($fileName, RowMap::build($transformer)));
+        $this->iterator = self::create($fileName, RowMap::build($transformer));
+        parent::__construct($this->iterator);
     }
 
     public function as_objects()
@@ -20,6 +22,7 @@ class CsvFileReader extends FluentIterator
             return (object)$x;
         });
     }
+    public function headers(){ return $this->iterator->firstRow; }
     private static function create($fileName, RowMap $transformer)
     {
         return new class($fileName, $transformer) implements \Iterator {
@@ -28,7 +31,7 @@ class CsvFileReader extends FluentIterator
 
             private $rowIndex;
             private $fileHandle;
-            private $firstRow;
+            public $firstRow;
             private $rows = [];
 
             public function __construct($fileName, RowMap $transformer)
