@@ -26,7 +26,7 @@ class FluentIterator implements \Iterator, \ArrayAccess
             throw new InvalidArgumentException('The $inner iterator is not permitted to be null');
         }
         $this->inner =  $inner;
-        $this->is_array = is_array($inner) || ($inner instanceof \ArrayAccess && $inner instanceof \Iterator);
+        $this->is_array = is_array($inner);// || ($inner instanceof \ArrayAccess && $inner instanceof \Iterator);
     }
 
     public static function range($base, $count)
