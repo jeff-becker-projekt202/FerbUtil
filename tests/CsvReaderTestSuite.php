@@ -57,8 +57,8 @@ class CsvReaderTestSuite extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['a'=>'4','b'=>'5','c'=>'6'], $csv[1]);
     }
 
-    public function testSnakeCaseTransformerIncludesUnderscores(){
-
+    public function testSnakeCaseTransformerIncludesUnderscores()
+    {
         $t = HeaderForm::snake_case();
         $this->assertEquals('test_header', $t('Test Header'));
     }
