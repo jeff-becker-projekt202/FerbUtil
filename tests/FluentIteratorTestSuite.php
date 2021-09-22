@@ -229,7 +229,7 @@ class FluentIteratorTestSuite extends \PHPUnit\Framework\TestCase
 
     public function testOrderByAsc()
     {
-        $result = FluentIterator::range(0, 10)->reverse()
+        $result = FluentIterator::from([9,8,7,6,5,4,3,2,1,0])
             ->order_by_asc()
         ;
         $this->assertSequenceEquals(
@@ -240,13 +240,11 @@ class FluentIteratorTestSuite extends \PHPUnit\Framework\TestCase
 
     public function testOrderByDesc()
     {
-        $result = FluentIterator::range(0, 10)
+        $actual = FluentIterator::range(0, 10)
             ->order_by_desc()
         ;
-        $this->assertSequenceEquals(
-            FluentIterator::range(0, 10)->reverse(),
-            $result
-        );
+        $expected = [9,8,7,6,5,4,3,2,1,0];
+        $this->assertSequenceEquals($expected,$actual);
     }
 
     public function testIntersect()
