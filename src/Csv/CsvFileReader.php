@@ -15,7 +15,7 @@ class CsvFileReader extends FluentIterator
         $this->iterator = self::create($fileOrName, RowMap::build($transformer));
         parent::__construct($this->iterator);
     }
-//https://stackoverflow.com/questions/2276626/is-there-a-way-to-access-a-string-as-a-filehandle-in-php
+    //https://stackoverflow.com/questions/2276626/is-there-a-way-to-access-a-string-as-a-filehandle-in-php
     public function as_objects()
     {
         return $this->map(function ($x) {
@@ -28,8 +28,7 @@ class CsvFileReader extends FluentIterator
     }
     private static function create($fileName, RowMap $transformer)
     {
-        if($fileName instanceof \SplFileInfo){
-            
+        if ($fileName instanceof \SplFileInfo) {
         }
         return new class($fileName, $transformer) implements \Iterator {
             private $fileName;
@@ -49,20 +48,18 @@ class CsvFileReader extends FluentIterator
             public function rewind()
             {
                 if (null === $this->file) {
-                    
-                    if($this->fileName instanceof \SplFileObject){
+                    if ($this->fileName instanceof \SplFileObject) {
                         $this->file = $this->fileName;
-                    }
-                    else{
+                    } else {
                         $this->file = new \SplFileObject($this->fileName);
                     }
                 }
                 $this->file->rewind();
                 $this->rowIndex = -1;
                 $this->rows = [];
-                
+
                 $this->firstRow = null;
-   
+
 
                 $this->next();
             }

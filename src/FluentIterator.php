@@ -322,7 +322,8 @@ class FluentIterator implements \Iterator
         });
     }
 
-    public function page($skip, $take){
+    public function page($skip, $take)
+    {
         return $this->skip($skip)->take($take);
     }
     /**
