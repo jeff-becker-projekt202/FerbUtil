@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Ferb\Util;
 
+use Exception;
 use InvalidArgumentException;
 
-class FluentIterator implements \Iterator
+class FluentIterator implements \Iterator, \ArrayAccess
 {
     private $inner;
     private $is_array;
@@ -24,8 +25,8 @@ class FluentIterator implements \Iterator
         if (null === $inner) {
             throw new InvalidArgumentException('The $inner iterator is not permitted to be null');
         }
-        $this->inner = is_array($inner) ? array_values($inner) : $inner;
-        $this->is_array = is_array($inner);
+        $this->inner =  $inner;
+        $this->is_array = is_array($inner) || ($inner instanceof \ArrayAccess && $inner instanceof \Iterator);
     }
 
     public static function range($base, $count)
@@ -686,5 +687,31 @@ class FluentIterator implements \Iterator
         if (is_object($this->inner) && method_exists($this->inner, 'dispose')) {
             $this->inner->dispose();
         }
+    }
+
+
+    public function offsetExists( $offset){
+        if(!$this->is_array){
+            throw new Exception("Attempted ArrayAccess->offsetExists agains an materialized iterator");
+        }
+        return $this->inner->offsetExists($offset);
+    }
+    public function offsetGet( $offset){
+        if(!$this->is_array){
+            throw new Exception("Attempted ArrayAccess->offsetGet agains an materialized iterator");
+        }
+        return $this->inner->offsetGet($offset);
+    }
+    public function offsetSet( $offset,  $value){
+        if(!$this->is_array){
+            throw new Exception("Attempted ArrayAccess->offsetSet agains an materialized iterator");
+        }
+        $this->inner->offsetSet($offset, $value);
+    }
+    public function offsetUnset( $offset){
+        if(!$this->is_array){
+            throw new Exception("Attempted ArrayAccess->offsetUnset agains an materialized iterator");
+        }
+        $this->inner->offsetUnset($offset);
     }
 }
