@@ -10,12 +10,12 @@ use InvalidArgumentException;
 class CsvFileReader extends FluentIterator
 {
     private $iterator;
-    public function __construct($fileName, $transformer = null)
+    public function __construct($fileOrName, $transformer = null)
     {
-        $this->iterator = self::create($fileName, RowMap::build($transformer));
+        $this->iterator = self::create($fileOrName, RowMap::build($transformer));
         parent::__construct($this->iterator);
     }
-
+//https://stackoverflow.com/questions/2276626/is-there-a-way-to-access-a-string-as-a-filehandle-in-php
     public function as_objects()
     {
         return $this->map(function ($x) {
@@ -28,12 +28,15 @@ class CsvFileReader extends FluentIterator
     }
     private static function create($fileName, RowMap $transformer)
     {
+        if($fileName instanceof \SplFileInfo){
+            
+        }
         return new class($fileName, $transformer) implements \Iterator {
             private $fileName;
             private $transformer;
 
             private $rowIndex;
-            private $fileHandle;
+            private $file;
             public $firstRow;
             private $rows = [];
 
@@ -45,16 +48,21 @@ class CsvFileReader extends FluentIterator
 
             public function rewind()
             {
-                if (null != $this->fileHandle) {
-                    fclose($this->fileHandle);
+                if (null === $this->file) {
+                    
+                    if($this->fileName instanceof \SplFileObject){
+                        $this->file = $this->fileName;
+                    }
+                    else{
+                        $this->file = new \SplFileObject($this->fileName);
+                    }
                 }
+                $this->file->rewind();
                 $this->rowIndex = -1;
                 $this->rows = [];
-                $this->fileHandle = fopen($this->fileName, 'r');
+                
                 $this->firstRow = null;
-                if (false == $this->fileHandle) {
-                    throw new InvalidArgumentException("The fileName supplied does not point to a valid file {$this->fileName}");
-                }
+   
 
                 $this->next();
             }
@@ -71,14 +79,14 @@ class CsvFileReader extends FluentIterator
 
             public function next()
             {
-                if (null != $this->fileHandle) {
-                    $row = fgetcsv($this->fileHandle);
+                if (null != $this->file) {
+                    $row = $this->file->fgetcsv();
                     ++$this->rowIndex;
                     if ($row) {
                         if (0 == $this->rowIndex) {
                             $this->firstRow = $this->transformer->clean_headers($row);
                             if ($this->transformer->skip_first_row()) {
-                                $row2 = fgetcsv($this->fileHandle);
+                                $row2 = $this->file->fgetcsv();
                                 if (null != $row2) {
                                     array_push($this->rows, $this->transformer->transform($this->rowIndex, $row2, $this->firstRow));
                                 } else {
@@ -106,7 +114,7 @@ class CsvFileReader extends FluentIterator
                     return true;
                 }
 
-                if (null != $this->fileHandle) {
+                if (null != $this->file) {
                     $this->dispose();
                 }
 
@@ -115,11 +123,10 @@ class CsvFileReader extends FluentIterator
 
             public function dispose()
             {
-                if (null != $this->fileHandle) {
-                    fclose($this->fileHandle);
+                if (null != $this->file) {
                     $this->rows = [];
                     $this->rowIndex = -1;
-                    $this->fileHandle = null;
+                    $this->file = null;
                 }
             }
         };

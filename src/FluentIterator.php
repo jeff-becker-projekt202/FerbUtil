@@ -321,6 +321,10 @@ class FluentIterator implements \Iterator
             }
         });
     }
+
+    public function page($skip, $take){
+        return $this->skip($skip)->take($take);
+    }
     /**
      * Skips $count items from the source iterator
      * @param int $count the number of items to skip
