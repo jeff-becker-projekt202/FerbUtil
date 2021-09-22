@@ -34,6 +34,7 @@ final class HeaderForm
             $input = preg_replace('/\s+/', '_', $input);
         }
         $res = strtolower($input);
+        $res = str_replace(' ','_',$res);
         return $res;
     }
     private static function to_camelCase($input)

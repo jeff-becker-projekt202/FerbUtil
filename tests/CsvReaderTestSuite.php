@@ -56,6 +56,12 @@ class CsvReaderTestSuite extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['a'=>'1','b'=>'2','c'=>'3'], $csv[0]);
         $this->assertEquals(['a'=>'4','b'=>'5','c'=>'6'], $csv[1]);
     }
+
+    public function testSnakeCaseTransformerIncludesUnderscores(){
+
+        $t = HeaderForm::snake_case();
+        $this->assertEquals('test_header', $t('Test Header'));
+    }
     public function testCanUseNames()
     {
         $csv =  Guard::using(new CsvFileReader(self::FILENAME, RowMap::use_names(['first','second','third'])), function ($x) {
