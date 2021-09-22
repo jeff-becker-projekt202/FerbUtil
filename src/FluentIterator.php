@@ -432,7 +432,7 @@ class FluentIterator implements \Iterator
             return $a - $b;
         };
         $arr = $this->to_array();
-        \uasort($arr, $comparitor);
+        \usort($arr, $comparitor);
 
         return new self($arr);
     }
