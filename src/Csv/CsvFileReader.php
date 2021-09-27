@@ -28,8 +28,6 @@ class CsvFileReader extends FluentIterator
     }
     private static function create($fileName, RowMap $transformer)
     {
-        if ($fileName instanceof \SplFileInfo) {
-        }
         return new class($fileName, $transformer) implements \Iterator {
             private $fileName;
             private $transformer;

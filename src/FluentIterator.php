@@ -322,7 +322,8 @@ class FluentIterator implements \Iterator
         });
     }
 
-    public function page($skip, $take){
+    public function page($skip, $take)
+    {
         return $this->skip($skip)->take($take);
     }
     /**
@@ -562,7 +563,7 @@ class FluentIterator implements \Iterator
     public function last()
     {
         if ($this->is_array) {
-            return $this->inner[array_key_last($this->inner)];
+            return $this->inner[\array_key_last($this->inner)];
         }
         foreach ($this as $item) {
         }
@@ -573,7 +574,7 @@ class FluentIterator implements \Iterator
     public function first()
     {
         if ($this->is_array) {
-            return$this->inner[array_key_first($this->inner)];
+            return$this->inner[\array_key_first($this->inner)];
         }
         return $this->element_at(0);
     }
