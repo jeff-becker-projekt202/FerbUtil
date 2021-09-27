@@ -563,7 +563,15 @@ class FluentIterator implements \Iterator
     public function last()
     {
         if ($this->is_array) {
-            return $this->inner[\array_key_last($this->inner)];
+            if(function_exists('array_key_last')){
+                return $this->inner[\array_key_last($this->inner)];
+            }
+            else{
+                $keys = array_keys($this->inner);
+                $last_key = $keys[count($keys)-1];
+                return $this->inner[$last_key];
+            }
+           
         }
         foreach ($this as $item) {
         }
@@ -574,7 +582,15 @@ class FluentIterator implements \Iterator
     public function first()
     {
         if ($this->is_array) {
-            return$this->inner[\array_key_first($this->inner)];
+
+            if(function_exists('array_key_first')){
+                return $this->inner[\array_key_first($this->inner)];
+            }
+            else{
+                $keys = array_keys($this->inner);
+                $first_key = $keys[0];
+                return $this->inner[$first_key];
+            }
         }
         return $this->element_at(0);
     }
